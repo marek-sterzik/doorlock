@@ -1,6 +1,6 @@
-# SPŠ Ostrov PHP runtime environment
+# Doorlock
 
-Toto je vývojové prostředí pro vývoj PHP aplikací v předmětu PVA.
+Toto je webová aplikace pro ovládání elektronického zámku dveří.
 
 ## Závislosti
 
