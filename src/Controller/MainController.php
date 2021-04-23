@@ -56,10 +56,12 @@ class MainController extends AbstractController
             }
 
             return false;
-        } else if ($request->query->get('logout')) {
+        } elseif ($request->query->get('logout')) {
             $this->userAuth->logoutUser();
 
             return true;
         }
+
+        return false;
     }
 }
