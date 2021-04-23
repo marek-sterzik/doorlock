@@ -1,7 +1,6 @@
 div.telo {
 	margin: auto; 
-	box-shadow: 
-	3px 3px 3px #e0e0e0;
+	box-shadow: 3px 3px 3px #e0e0e0;
 	border: 1px solid #f0f0f0;
 	padding: 1em;
 	max-width: 50em; 
@@ -19,10 +18,20 @@ p {
 div.button {
 	border: 1px solid #000;
 	border-radius: 5px;
+	padding: 5vh;
+	text-align: center;
+	font-size: 20pt;
+	font-weight: bold;
+	color: #900;
+	box-shadow: 3px 3px 0px #333;
+	background-color: #FFC;
 }
 div.button:hover {
 	border: 2px solid #000;
+	cursor: pointer;
 }
 div.button:active {
-	border: 1px solid #500;
+	border: 2px solid #900;
+	transform: translateY(2px);
+	box-shadow: 1px 1px 0px #333;
 }
