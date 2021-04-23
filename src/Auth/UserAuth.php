@@ -15,9 +15,6 @@ class UserAuth
     /** @var UserRepository */
     private $userRepository;
 
-    /** @var PasswordVerifier */
-    private $passwordVerifier;
-
     public function __construct(
         SessionInterface $session,
         UserRepository $userRepository
@@ -41,7 +38,7 @@ class UserAuth
         return true;
     }
 
-    private function logoutUser(): void
+    public function logoutUser(): void
     {
         $this->session->set("admin-user-id", null);
     }
@@ -65,7 +62,7 @@ class UserAuth
         if ($user === null) {
             return null;
         }
-        if (!$password === $user->getPassword()) {
+        if ($password !== $user->getPassword()) {
             return null;
         }
         return $user;
