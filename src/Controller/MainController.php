@@ -3,17 +3,63 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Auth\UserAuth;
+
 class MainController extends AbstractController
 {
+    /** @var UserAuth */
+    private $userAuth;
+
+    public function __construct(UserAuth $userAuth)
+    {
+        $this->userAuth = $userAuth;
+    }
+
+
     /**
      * @Route("/", name="main")
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return $this->render('main.html.twig', [
-        ]);
+        $redirectNeeded = $this->doLoginOrLogout($request);
+
+        if ($redirectNeeded) {
+            return $this->redirectToRoute('main');
+        }
+
+        $user = $this->userAuth->getLoggedInUser();
+
+        if ($user === null) {
+            return $this->render('login.html.twig');
+        } else {
+            return $this->render('main.html.twig');
+        }
+    }
+
+    private function doLoginOrLogout(Request $request): bool
+    {
+        if ($request->getMethod() === 'POST') {
+            $login = $request->request->get('login');
+            $password = $request->request->get('password');
+            
+            $success = false;
+            if (is_string($login) && is_string($password)) {
+                $success = $this->userAuth->loginUser($login, $password);
+            }
+
+            if (!$success) {
+                $this->userAuth->logoutUser();
+            }
+
+            return false;
+        } else if ($request->query->get('logout')) {
+            $this->userAuth->logoutUser();
+
+            return true;
+        }
     }
 }
