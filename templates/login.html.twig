@@ -1,10 +1,15 @@
 {% extends "base.html.twig" %}
-{% block body %}
-    <body>
-        <div class="telo">
-            <h1>Elektronický zámek dveří</h1>
-            <p>
-            </p>
-        </div>
-    </body>
+{% block body %}  
+<body>     
+    <div class="telo">    
+    <form id="login" method="post" action="login.php">       
+        <input type="Text" name="name" id="input-name" placeholder="Username">    
+        <br><br>        
+        <input type="Password" name="password" id="input-password" placeholder="Password">    
+        <br><br>    
+        <input type="button" name="log" id="log" value="PRIHLASIT SE">       
+        <br><br>    
+    </form>     
+</div>    
+</body>    
 {% endblock %}
