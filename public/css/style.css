@@ -43,3 +43,9 @@ div.button:active {
 	transform: translateY(2px);
 	box-shadow: 1px 1px 0px #333;
 }
+div.button.on {
+	background-color: #CFC;
+}
+div.button.off {
+	background-color: #FCC;
+}
