@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+
+import time
+import automationhat
+import sys
+
+if (len(sys.argv) != 2):
+    print("usage: {} power".format(sys.argv[0]), file=sys.stderr)
+    exit(1)
+
+try:
+    power = int(sys.argv[1])
+except Exception:
+    print("Error: invalid power value")
+    exit(1)
+
+if (power < 0 or power > 100):
+    print("Error: power is out of range");
+    exit(1)
+
+print("starting at power {}%".format(power), file=sys.stderr)
+
+stepInterval = 0.0001
+
+ah = automationhat
+onTime = power*stepInterval
+offTime = (100-power)*stepInterval
+
+while True:
+    if (power > 0):
+        ah.output.one.on()
+        time.sleep(onTime)
+    if (power < 100):
+        ah.output.one.off()
+        time.sleep(offTime)
+
+ah.output.one.off()
+

@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+import time
+import automationhat
+import sys
+
+if (len(sys.argv) != 2):
+    print("usage: {} openTime".format(sys.argv[0]), file=sys.stderr)
+    exit(1)
+
+try:
+    openTime = int(sys.argv[1])
+except Exception:
+    print("Error: invalid openTime value")
+    exit(1)
+
+print("opening door for {}s".format(openTime), file=sys.stderr)
+
+
+ah = automationhat
+
+ah.relay.one.on()
+time.sleep(openTime)
+ah.relay.one.off()
+
