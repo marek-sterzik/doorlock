@@ -9,6 +9,9 @@
 #ides (put your favorite IDE tmp file masks here)
 .*.swp
 
+#python cache
+__pycache__
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php

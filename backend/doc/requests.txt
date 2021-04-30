@@ -1,0 +1,49 @@
+GET /login?username=abcd&password=cdef
+> {"code": "ok", "sessionId": "abc-012-abc"}
+> {"code": "invalid_credentials"}
+
+GET /logout?sid=abcd-xby-asdfy
+> {"code": "ok"}
+> {"code": "invalid_sid"}
+
+GET /status?sid=abcd-xby-asdfy
+> {"code": "ok", "doorOpen": true}
+> {"code": "invalid_sid"}
+> {"code": "not_authorized"}
+
+GET /open?sid=abcd-xby-asdfy
+> {"code": "ok"}
+> {"code": "invalid_sid"}
+> {"code": "not_authorized"}
+
+GET /create-user?sid=abcd-xby-asdfy&username=abcd&password=cdef
+> {"code": "ok"}
+> {"code": "invalid_sid"}
+> {"code": "missing_parameters"}
+> {"code": "not_authorized"}
+> {"code": "invalid_username"}
+> {"code": "user_exists"}
+
+GET /set-password?sid=abcd-xby-asdfy&username=abcd&password=ghij
+GET /set-password?sid=abcd-xby-asdfy&password=ghij&oldpassword=cdef
+> {"code": "ok"}
+> {"code": "invalid_sid"}
+> {"code": "missing_parameters"}
+> {"code": "not_authorized"}
+> {"code": "unknown_user"}
+
+GET /set-permissions?sid=abcd-xby-asdf&username=abcd&admin=1
+> {"code": "ok"}
+> {"code": "invalid_sid"}
+> {"code": "missing_parameters"}
+> {"code": "invalid_parameter"}
+> {"code": "not_authorized"}
+> {"code": "not_allowed"}
+> {"code": "unknown_user"}
+
+GET /delete-user?sid=abcd-xby-asdfy&username=abcd
+> {"code": "ok"}
+> {"code": "invalid_sid"}
+> {"code": "missing_parameters"}
+> {"code": "not_authorized"}
+> {"code": "unknown_user"}

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+./pwm "$1" &
+pid="$?"
+
+sleep 2
+
+kill "$pid"
