@@ -7,7 +7,7 @@ class Doorlock:
         
     def status(self, sid):
         if not self.isAuthorized(sid):
-            return {"code": "nuauthorized"}
+            return {"code": "unauthorized"}
         
         doorOpen = self.lock.isOpen()
 
