@@ -1,6 +1,6 @@
 # Doorlock
 
-Toto je webová aplikace pro ovládání elektronického zámku dveří.
+Toto je webová aplikace pro ovládání elektronického zámku dveří. Aplikace slouží jako frontend k ovládání elektrického zámku dvěří realizovaný pomocí Raspberry PI.
 
 ## Závislosti
 
