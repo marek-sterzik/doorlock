@@ -10,11 +10,11 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 def parseOptions(argv):
     options = {"dryRun": False, "port": 80}
-    (opts, args) = getopt.getopt(argv[1:], "p:D", ["port=", "dry-run"])
+    (opts, args) = getopt.getopt(argv[1:], "p:d", ["port=", "dry-run"])
     for (opt, value) in opts:
         if (opt == '-p' or opt == '--port'):
             options['port'] = int(value)
-        elif (opt == '-D' or opt == '--dry-run'):
+        elif (opt == '-d' or opt == '--dry-run'):
             options['dryRun'] = True
     return options
 
