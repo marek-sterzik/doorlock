@@ -3,20 +3,26 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Auth\UserAuth;
+use App\Doorlock\Doorlock;
 
 class MainController extends AbstractController
 {
     /** @var UserAuth */
     private $userAuth;
 
-    public function __construct(UserAuth $userAuth)
+    /** @var Doorlock */
+    private $doorlock;
+
+    public function __construct(UserAuth $userAuth, Doorlock $doorlock)
     {
         $this->userAuth = $userAuth;
+        $this->doorlock = $doorlock;
     }
 
 
