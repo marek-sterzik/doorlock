@@ -24,40 +24,40 @@ class Doorlock
      */
     public function __construct(string $lockUrl, string $lockAuthenticationKey)
     {
-        $this->lockUrl = $lockUrl;
+        $this->lockUrl = $this->canonizeUrl($lockUrl);
         $this->lockAuthenticationKey = $lockAuthenticationKey;
     }
 
-    public function unlock(): void
+    public function unlock(): bool
     {
-
+        $data = $this->makeRequest("/open");
+        return isset($data['code']) && ($data['code'] === 'ok');
     }
 
-    public function getStatus(): array
+    public function getStatus(): ?array
     {
-        $lockAuthenticationKey = base64_encode($this->lockAuthenticationKey);
-        $context = stream_context_create([
-            'http' => [
-                'header' => 'Authorization: Basic ' . $lockAuthenticationKey
-            ]
-        ]);
-        $rawStatus = @file_get_contents($this->lockUrl, false, $context);
-        if ($rawStatus === false) {
-            throw new Exception('An attempt to retrieve lock status failed.');
-        }
-        // Example: $rawStatus = 'true-600' | $rawStatus = 'false-null'
-        $status = explode('-', $rawStatus);
+        return $this->makeRequest("/open");
+    }
 
-        $finalStatus = [];
+    private function canonizeUrl(string $url): string
+    {
+        return rtrim($url, '/');
+    }
 
-        if ($status[0] === 'true') {
-            $finalStatus['state'] = true;
-            $finalStatus['timeToLock'] = (int)$status[1];
-        } else {
-            $finalStatus['state'] = false;
-            $finalStatus['timeToLock'] = null;
+    private function makeRequest(string $path): ?array
+    {
+        $url = $this->lockUrl . $path . "?sid=" . urlencode($this->lockAuthenticationKey);
+        $data = @file_get_contents($url);
+        if (!is_string($data)) {
+            return null;
         }
-            
-        return $finalStatus;
+
+        $data = @json_decode($data, true);
+
+        if (!is_array($data)) {
+            return null;
+        }
+
+        return $data;
     }
 }
