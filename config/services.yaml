@@ -4,7 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-
+    app.doorlock_url: '%env(DOORLOCK_URL)%'
+    app.doorlock_auth_key: '%env(DOORLOCK_AUTH_KEY)%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -33,3 +34,7 @@ services:
         arguments:
             $assetBaseDir: '%kernel.project_dir%/public'
             $versionLinkWildCard: 'assets-v*'
+    App\Doorlock\Doorlock:
+        arguments:
+            $lockUrl: '%app.doorlock_url%'
+            $lockAuthenticationKey: '%app.doorlock_auth_key%'
