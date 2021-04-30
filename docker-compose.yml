@@ -15,6 +15,13 @@ services:
             - .:/var/www/html
         environment:
             APACHE_DOCUMENT_ROOT: /var/www/html/public
+    doorlock:
+        build: docker/doorlockd
+
+        expose:
+            - 80
+        volumes:
+            - ./backend:/app
     db:
         image: mysql:5.7.22
         expose:
