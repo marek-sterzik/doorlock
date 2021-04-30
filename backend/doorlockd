@@ -9,13 +9,15 @@ from urllib.parse import urlparse, parse_qs
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 def parseOptions(argv):
-    options = {"dryRun": False, "port": 80}
-    (opts, args) = getopt.getopt(argv[1:], "p:d", ["port=", "dry-run"])
+    options = {"dryRun": False, "port": 80, "key": None}
+    (opts, args) = getopt.getopt(argv[1:], "p:k:d", ["port=", "key=", "dry-run"])
     for (opt, value) in opts:
         if (opt == '-p' or opt == '--port'):
             options['port'] = int(value)
         elif (opt == '-d' or opt == '--dry-run'):
             options['dryRun'] = True
+        elif (opt == '-k' or opt == '--key'):
+            options['key'] = value
     return options
 
 class Controller:
@@ -30,14 +32,16 @@ class Controller:
         }
 
     def handleStatus(self, params):
-        if not ('sid' in params):
-            return self.jsonResponse(200, {"code": "invalid_sid"});
-        return self.jsonResponse(200, self.doorlock.status(params['sid']))
+        sid = None
+        if ('sid' in params):
+            sid = params['sid']
+        return self.jsonResponse(200, self.doorlock.status(sid))
 
     def handleOpen(self, params):
-        if not ('sid' in params):
-            return self.jsonResponse(200, {"code": "invalid_sid"});
-        return self.jsonResponse(200, self.doorlock.open(params['sid']))
+        sid = None
+        if ('sid' in params):
+            sid = params['sid']
+        return self.jsonResponse(200, self.doorlock.open(sid))
     
     def handleTick(self):
         self.doorlock.tick()
@@ -59,7 +63,7 @@ class Controller:
         return response
 
 options = parseOptions(sys.argv)
-doorlockObj = Doorlock(options['dryRun'])
+doorlockObj = Doorlock(options['dryRun'], options['key'])
 controller = Controller(doorlockObj)
 
 class MyHandler (BaseHTTPRequestHandler):
@@ -83,8 +87,6 @@ class MyHTTPServer (HTTPServer):
         super().service_actions()
         controller.handleTick()
 
-
-#pprint(options)
 
 httpd = MyHTTPServer(('',options['port']), MyHandler)
 httpd.serve_forever(1)

@@ -1,12 +1,13 @@
 from .Lock import Lock
 
 class Doorlock:
-    def __init__(self, dryRun):
+    def __init__(self, dryRun, key):
         self.lock = Lock(dryRun)
+        self.key = key
         
     def status(self, sid):
         if not self.isAuthorized(sid):
-            return {"code": "invalid_sid"}
+            return {"code": "nuauthorized"}
         
         doorOpen = self.lock.isOpen()
 
@@ -15,7 +16,7 @@ class Doorlock:
 
     def open(self, sid):
         if not self.isAuthorized(sid):
-            return {"code": "invalid_sid"}
+            return {"code": "unauthorized"}
         
         self.lock.doOpen()
 
@@ -25,7 +26,7 @@ class Doorlock:
         self.lock.tick()
             
     def isAuthorized(self, sid):
-        if sid == 'abcdef':
+        if self.key == None or self.key == sid:
             return True
         else:
             return False

@@ -22,6 +22,8 @@ services:
             - 80
         volumes:
             - ./backend:/app
+        environment:
+            DOORLOCK_KEY: 0123456789abcdef 
     db:
         image: mysql:5.7.22
         expose:

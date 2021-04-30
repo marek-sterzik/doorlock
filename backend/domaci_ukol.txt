@@ -1,5 +1,0 @@
-1. Osetrit vyjimky pri volani parseOptions a pokud vyjimka nastane, pak zobrazit chybu a usage.
-2. Parser Optionu by mel generovat dve nove vyjimky:
-   a. Pokud je pole argumentu (args) neprazdne
-   b. Pokud nebyla zadana databaze (tj. databaze stale obshauje None)
-3. Podpora optionu -h resp. --help - udelat na nej kolonku v hashi options
