@@ -9,13 +9,11 @@ from urllib.parse import urlparse, parse_qs
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 def parseOptions(argv):
-    options = {"dryRun": False, "port": 80, "database": None}
-    (opts, args) = getopt.getopt(argv[1:], "p:d:D", ["port=", "database=", "dry-run"])
+    options = {"dryRun": False, "port": 80}
+    (opts, args) = getopt.getopt(argv[1:], "p:D", ["port=", "dry-run"])
     for (opt, value) in opts:
         if (opt == '-p' or opt == '--port'):
             options['port'] = int(value)
-        elif (opt == '-d' or opt == '--database'):
-            options['database'] = value
         elif (opt == '-D' or opt == '--dry-run'):
             options['dryRun'] = True
     return options
@@ -31,16 +29,6 @@ class Controller:
             "data": json.dumps(data)
         }
 
-    def handleLogin(self, params):
-        if not ('username' in params) or not ('password' in params):
-            return self.jsonResponse(200, {"code": "invalid_credentials"});
-        return self.jsonResponse(200, self.doorlock.login(params['username'], params['password']))
-    
-    def handleLogout(self, params):
-        if not ('sid' in params):
-            return self.jsonResponse(200, {"code": "invalid_sid"});
-        return self.jsonResponse(200, self.doorlock.logout(params['sid']))
-
     def handleStatus(self, params):
         if not ('sid' in params):
             return self.jsonResponse(200, {"code": "invalid_sid"});
@@ -51,41 +39,6 @@ class Controller:
             return self.jsonResponse(200, {"code": "invalid_sid"});
         return self.jsonResponse(200, self.doorlock.open(params['sid']))
     
-    def handleCreateUser(self, params):
-        if not ('sid' in params):
-            return self.jsonResponse(200, {"code": "invalid_sid"});
-        if not ('username' in params) or not ('password' in params):
-            return self.jsonResponse(200, {"code": "missing_parameters"});
-        return self.jsonResponse(200, self.doorlock.createUser(params['sid'], params['username'], params['password']))
-
-    def handleSetPassword(self, params):
-        if not ('sid' in params):
-            return self.jsonResponse(200, {"code": "invalid_sid"});
-        if not ('password' in params):
-            return self.jsonResponse(200, {"code": "missing_parameters"});
-        username = params['username'] if ('username' in params) else None
-        password = params['password']
-        oldPassword = params['oldpassword'] if ('oldpassword' in params) else None
-        if username is None and oldPassword is None:
-            return self.jsonResponse(200, {"code": "missing_parameters"});
-        return self.jsonResponse(200, self.doorlock.setUserPassword(params['sid'], username, password, oldPassword))
-    
-    def handleSetPermissions(self, params):
-        if not ('sid' in params):
-            return self.jsonResponse(200, {"code": "invalid_sid"});
-        if not ('username' in params) or not ('admin' in params):
-            return self.jsonResponse(200, {"code": "missing_parameters"});
-        if (params['admin'] != '0') and (params['admin'] != '1'):
-            return self.jsonResponse(200, {"code": "invalid_parameter", "parameter": "admin"});
-        return self.jsonResponse(200, self.doorlock.setUserPermissions(params['sid'], params['username'], (params['admin'] == '1')))
-    
-    def handleDeleteUser(self, params):
-        if not ('sid' in params):
-            return self.jsonResponse(200, {"code": "invalid_sid"});
-        if not ('username' in params):
-            return self.jsonResponse(200, {"code": "missing_parameters"});
-        return self.jsonResponse(200, self.doorlock.deleteUser(params['sid'], params['username']))
-
     def handleTick(self):
         self.doorlock.tick()
 
@@ -96,28 +49,17 @@ class Controller:
             "data": "<html><body><h1>Not Found</h1><p>File not found</p></body></html>"
         }
     def handleRequest(self, realPath, params):
-        if (realPath == "/login"):
-                fn = self.handleLogin
-        elif (realPath == "/logout"):
-                fn = self.handleLogout
-        elif (realPath == "/status"):
+        if (realPath == "/status"):
                 fn = self.handleStatus
         elif (realPath == "/open"):
                 fn = self.handleOpen
-        elif (realPath == "/create-user"):
-                fn = self.handleCreateUser
-        elif (realPath == "/set-password"):
-                fn = self.handleSetPassword
-        elif (realPath == "/set-permissions"):
-                fn = self.handleSetPermissions
-        elif (realPath == "/delete-user"):
-                fn = self.handleDeleteUser
         else:
                 fn = self.handleInvalid
         response = fn(params)
         return response
 
-doorlockObj = Doorlock()
+options = parseOptions(sys.argv)
+doorlockObj = Doorlock(options['dryRun'])
 controller = Controller(doorlockObj)
 
 class MyHandler (BaseHTTPRequestHandler):
@@ -141,7 +83,6 @@ class MyHTTPServer (HTTPServer):
         super().service_actions()
         controller.handleTick()
 
-options = parseOptions(sys.argv)
 
 #pprint(options)
 

@@ -1,7 +1,7 @@
 from time import time
 
 class Lock:
-    def __init__(self):
+    def __init__(self, dryRun):
         self.openFlag = False
         self.closeTimestamp = time()
 
