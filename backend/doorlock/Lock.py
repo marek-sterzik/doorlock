@@ -1,5 +1,7 @@
 from time import time
 
+import sys;
+
 class Lock:
     def __init__(self, dryRun):
         self.openFlag = False
@@ -22,7 +24,7 @@ class Lock:
             self.openFlag = False;
 
     def setDoorOpen(self):
-        print("door open")
+        print("door open", file=sys.stderr)
 
     def setDoorClosed(self):
-        print("door closed")
+        print("door closed", file=sys.stderr)
