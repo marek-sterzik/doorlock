@@ -11,45 +11,37 @@ class Doorlock
     /**
      * @var string
      */
-    private $unlockUrl;
+    private $lockUrl;
 
     /**
      * @var string
      */
-    private $lockStatusRequest;
+    private $lockAuthenticationKey;
 
     /**
-     * @var string
+     * @param string $lockUrl
+     * @param string $lockAuthenticationKey
      */
-    private $authentication;
-
-    /**
-     * @param string $unlockUrl
-     * @param string $lockStatusRequest
-     * @param string $authentication
-     */
-    public function __construct(string $unlockUrl, string $lockStatusRequest, string $authentication)
+    public function __construct(string $lockUrl, string $lockAuthenticationKey)
     {
-        $this->unlockUrl = $unlockUrl;
-        $this->lockStatusRequest = $lockStatusRequest;
-        $this->authentication = $authentication;
+        $this->lockUrl = $lockUrl;
+        $this->lockAuthenticationKey = $lockAuthenticationKey;
     }
 
     public function unlock(): void
     {
-        header('Location: ' . $this->unlockUrl);
-        die;
+
     }
 
     public function getStatus(): array
     {
-        $authentication = base64_encode($this->authentication);
+        $lockAuthenticationKey = base64_encode($this->lockAuthenticationKey);
         $context = stream_context_create([
             'http' => [
-                'header' => 'Authorization: Basic ' . $authentication
+                'header' => 'Authorization: Basic ' . $lockAuthenticationKey
             ]
         ]);
-        $rawStatus = @file_get_contents($this->lockStatusRequest, false, $context);
+        $rawStatus = @file_get_contents($this->lockUrl, false, $context);
         if ($rawStatus === false) {
             throw new Exception('An attempt to retrieve lock status failed.');
         }
@@ -60,10 +52,10 @@ class Doorlock
 
         if ($status[0] === 'true') {
             $finalStatus['state'] = true;
-            $finalStatus['time_to_lock'] = (int)$status[1];
+            $finalStatus['timeToLock'] = (int)$status[1];
         } else {
             $finalStatus['state'] = false;
-            $finalStatus['time_to_lock'] = null;
+            $finalStatus['timeToLock'] = null;
         }
             
         return $finalStatus;
