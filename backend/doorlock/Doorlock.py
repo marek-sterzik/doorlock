@@ -10,8 +10,9 @@ class Doorlock:
             return {"code": "unauthorized"}
         
         doorOpen = self.lock.isOpen()
+        doorOpenTime = self.lock.getOpenTime()
 
-        return {"code": "ok", "doorOpen": doorOpen}
+        return {"code": "ok", "doorOpen": doorOpen, "doorOpenTime": doorOpenTime}
 
 
     def open(self, sid):
@@ -22,9 +23,11 @@ class Doorlock:
 
         return {"code": "ok"}
 
+
     def tick(self):
         self.lock.tick()
-            
+
+
     def isAuthorized(self, sid):
         if self.key == None or self.key == sid:
             return True
