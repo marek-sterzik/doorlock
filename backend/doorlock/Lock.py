@@ -7,20 +7,20 @@ class Lock:
         self.openFlag = False
         self.closeTimestamp = time()
 
-    def getOpenTime(self):
+    def getRemainingOpenTime(self):
         if not self.openFlag:
             return None
         else:
-            timeout = self.closeTimestamp - time()
-            if (timeout < 0):
-                timeout = 0
-            return int(timeout * 1000)
+            remainingOpenTime = self.closeTimestamp - time()
+            if (remainingOpenTime < 0):
+                remainingOpenTime = 0
+            return int(remainingOpenTime * 1000)
 
     def isOpen(self):
         return self.openFlag
 
-    def doOpen(self, timeout=5):
-        newTimestamp = time() + timeout
+    def doOpen(self, timeout=5000):
+        newTimestamp = time() + timeout/1000
         if (self.closeTimestamp < newTimestamp):
             self.closeTimestamp = newTimestamp
 
