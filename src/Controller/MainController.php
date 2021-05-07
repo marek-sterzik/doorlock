@@ -76,6 +76,10 @@ class MainController extends AbstractController
      */
     public function unlock(Request $request): Response
     {
+        if ($this->userAuth->getLoggedInUser() === null) {
+            return $this->redirectToRoute('login');
+        }
+
         $success = $this->doorlock->unlock();
         $responseBody = [
             "code" => $success ? 'ok' : 'error',
@@ -89,8 +93,11 @@ class MainController extends AbstractController
      */
     public function status(Request $request): Response
     {
-        $status = $this->doorlock->getStatus();
+        if ($this->userAuth->getLoggedInUser() === null) {
+            return $this->redirectToRoute('login');
+        }
 
+        $status = $this->doorlock->getStatus();
         if ($status === null) {
             $status = ["code" => "error"];
         }
