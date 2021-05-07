@@ -9,19 +9,22 @@ class Doorlock:
         if not self.isAuthorized(sid):
             return {"code": "unauthorized"}
         
-        doorOpen = self.lock.isOpen()
-        doorOpenTime = self.lock.getOpenTime()
-
-        return {"code": "ok", "doorOpen": doorOpen, "doorOpenTime": doorOpenTime}
+        return self.getStatus()
 
 
-    def open(self, sid):
+    def open(self, sid, timeout = 5000):
         if not self.isAuthorized(sid):
             return {"code": "unauthorized"}
         
-        self.lock.doOpen()
+        self.lock.doOpen(timeout)
+        return self.getStatus()
 
-        return {"code": "ok"}
+
+    def getStatus(self):
+        doorOpen = self.lock.isOpen()
+        remainingDoorOpenTime = self.lock.getRemainingOpenTime()
+
+        return {"code": "ok", "doorOpen": doorOpen, "remainingDoorOpenTime": remainingDoorOpenTime}
 
 
     def tick(self):

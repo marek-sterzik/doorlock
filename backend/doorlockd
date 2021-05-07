@@ -39,9 +39,19 @@ class Controller:
 
     def handleOpen(self, params):
         sid = None
+        timeout = 5000
         if ('sid' in params):
             sid = params['sid']
-        return self.jsonResponse(200, self.doorlock.open(sid))
+        if ('timeout' in params):
+            try:
+                timeout = int(params['timeout'])
+            except ValueError:
+                return self.jsonResponse(200, {"error": "invalid_timeout"});
+            
+            if timeout <= 0:
+                return self.jsonResponse(200, {"error": "invalid_timeout"});
+            
+        return self.jsonResponse(200, self.doorlock.open(sid, timeout))
     
     def handleTick(self):
         self.doorlock.tick()
