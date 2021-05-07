@@ -1,11 +1,15 @@
 {% extends "base.html.twig" %}
-{% block body %}
-    <body>
-        <div class="telo">
-            <h1>Elektronický zámek dveří</h1>
-            <p>
-                Toto je projekt elektronického zámku dveří.
-            </p>
-        </div>
-    </body>
+{% block body %}  
+<body>     
+    <div class="telo">    
+    <form id="login" method="post">       
+        <input type="Text" name="login" id="input-name" placeholder="Username">    
+        <br><br>        
+        <input type="Password" name="password" id="input-password" placeholder="Password">    
+        <br><br>    
+        <input type="submit" name="log" id="log" value="PRIHLASIT SE">       
+        <br><br>    
+    </form>     
+</div>    
+</body>
 {% endblock %}
