@@ -1,9 +1,51 @@
-div.telo {margin: auto; box-shadow: 3px 3px 3px #e0e0e0; border: 1px solid #f0f0f0; padding: 1em; max-width: 50em; background-color: white; }
-h1 {color: #800000; text-align: center; text-shadow: 2px 2px #e0e0e0;}
-p {text-indent: 1em; text-align: justify;}
-object.ptacek {width: 20em; height: 12em; margin: auto; display: block;}
-div#prepinac, div#prepinac-zpet {text-align: center; visibility: hidden;}
-div#prepinac a, div#prepinac-zpet a {color: inherit; text-decoration: underline;}
-video.sloupek {margin: auto; cursor: pointer;}
-.sloupek-kontejner {display: none; text-align: center;}
-
+body{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+}
+div.telo {
+	margin: auto; 
+	box-shadow: 3px 3px 3px #e0e0e0;
+	border: 1px solid #f0f0f0;
+	padding: 1em;
+	max-width: 50em; 
+	background-color: white;
+}
+h1 {
+	color: #800000;
+	text-align: center;
+	text-shadow: 2px 2px #e0e0e0;
+}
+p {
+	text-indent: 1em;
+	text-align: justify;
+}
+div.button {
+	border: 1px solid #000;
+	border-radius: 5px;
+	padding: 5vh;
+	text-align: center;
+	font-size: 20pt;
+	font-weight: bold;
+	color: #900;
+	box-shadow: 3px 3px 0px #333;
+	background-color: #FFC;
+}
+div.button:hover {
+	border: 2px solid #000;
+	cursor: pointer;
+}
+div.button:active {
+	border: 2px solid #900;
+	transform: translateY(2px);
+	box-shadow: 1px 1px 0px #333;
+}
+div.button.on {
+	background-color: #CFC;
+}
+div.button.off {
+	background-color: #FCC;
+}
