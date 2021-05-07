@@ -36,7 +36,7 @@ class Doorlock
 
     public function getStatus(): ?array
     {
-        return $this->makeRequest("/open");
+        return $this->makeRequest("/status");
     }
 
     private function canonizeUrl(string $url): string
