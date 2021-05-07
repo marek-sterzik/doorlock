@@ -77,7 +77,11 @@ class MainController extends AbstractController
     public function unlock(Request $request): Response
     {
         if ($this->userAuth->getLoggedInUser() === null) {
-            return $this->redirectToRoute('login');
+            $responseBody = [
+                'code' => 'not_authorized'
+            ];
+            $responseCode = 401;
+            return new JsonResponse($responseBody, $responseCode);
         }
 
         $success = $this->doorlock->unlock();
@@ -94,7 +98,11 @@ class MainController extends AbstractController
     public function status(Request $request): Response
     {
         if ($this->userAuth->getLoggedInUser() === null) {
-            return $this->redirectToRoute('login');
+            $responseBody = [
+                'code' => 'not_authorized'
+            ];
+            $responseCode = 401;
+            return new JsonResponse($responseBody, $responseCode);
         }
 
         $status = $this->doorlock->getStatus();
