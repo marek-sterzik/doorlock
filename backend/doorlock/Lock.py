@@ -7,6 +7,15 @@ class Lock:
         self.openFlag = False
         self.closeTimestamp = time()
 
+    def getOpenTime(self):
+        if not self.openFlag:
+            return None
+        else:
+            timeout = self.closeTimestamp - time()
+            if (timeout < 0):
+                timeout = 0
+            return int(timeout * 1000)
+
     def isOpen(self):
         return self.openFlag
 
