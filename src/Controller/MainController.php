@@ -70,4 +70,31 @@ class MainController extends AbstractController
 
         return false;
     }
+
+    /**
+     * @Route("/unlock", name="unlock")
+     */
+    public function unlock(Request $request): Response
+    {
+        $success = $this->doorlock->unlock();
+        $responseBody = [
+            "code" => $success ? 'ok' : 'error',
+        ];
+        $responseCode = $success ? 200 : 500;
+        return new JsonResponse($responseBody, $responseCode);
+    }
+
+    /**
+     * @Route("/status", name="status")
+     */
+    public function status(Request $request): Response
+    {
+        $status = $this->doorlock->getStatus();
+
+        if ($status === null) {
+            $status = ["code" => "error"];
+        }
+
+        return new JsonResponse($status);
+    }
 }
